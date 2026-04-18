@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Un Poema para Mamá</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Great+Vibes&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0f7fa, #fce4ec, #e0f2f1);
+            font-family: 'Playfair Display', serif;
+            color: #424242;
+            overflow: hidden;
+        }
+
+        #papele-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+        }
+
+        .title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            color: #d81b60;
+            margin-bottom: 30px;
+        }
+
+        #poema-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            min-height: 150px;
+            opacity: 1;
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+        }
+
+        #poema-text.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        #next-button {
+            background: none;
+            border: 2px solid #f48fb1;
+            color: #d81b60;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            padding: 12px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #next-button:hover {
+            background-color: #f48fb1;
+            color: rgb(255, 212, 212);
+            box-shadow: 0 5px 15px rgba(244, 143, 177, 0.4);
+        }
+
+        #next-button:after {
+            content: ' ❤';
+            font-size: 0.9rem;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f48fb1;
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="papele-container">
+        <div class="title">Un Poema para Mamá</div>
+        <p id="poema-text"></p>
+        <button id="next-button" onclick="siguientePoema()">Siguiente</button>
+    </div>
+
+    <script>
+        const poemas = [
+            "Madre, luz que nunca se apaga,\nen tus manos aprendí a vivir,\naunque el tiempo corra y se desgaste,\ntu amor siempre sabe resistir.",
+            "Si la vida es un camino incierto,\ntú eres mi mapa y mi verdad,\nmi refugio en días desiertos,\nmi eterna forma de paz.",
+            "En tus ojos vive mi historia,\nen tu voz aprendí a creer,\ncada paso lleva tu memoria,\ncada logro te vuelve a tener.",
+            "Madre, flor que nunca marchita,\naunque el viento quiera golpear,\ntu ternura siempre me habita,\ncomo un canto que no deja de sonar.",
+            "Hoy celebro que existes, madre,\nque el mundo te dejó llegar,\nporque sin ti no habría viaje,\nni razones para soñar."
+        ];
+
+        let index = 0;
+        const poemaText = document.getElementById('poema-text');
+        const button = document.getElementById('next-button');
+
+        function mostrarPoema() {
+            if (index < poemas.length) {
+                poemaText.innerHTML = poemas[index].replace(/\n/g, '<br>');
+                index++;
+            } else {
+                poemaText.innerHTML = "Feliz Cumpleaños Madre Mía ❤️";
+                button.style.display = 'none'; // Oculta el botón al final
+                finalConfetti();
+            }
+        }
+
+        function siguientePoema() {
+            poemaText.classList.add('hidden'); // Inicia la transición de salida
+            
+            setTimeout(() => {
+                mostrarPoema();
+                poemaText.classList.remove('hidden'); // Inicia la transición de entrada
+            }, 800); // Mismo tiempo que la transición CSS
+        }
+
+        // Mostrar el primer poema al cargar
+        mostrarPoema();
+
+        // Pequeño efecto de confeti para el final
+        function finalConfetti() {
+            for (let i = 0; i < 50; i++) {
+                crearConfeti();
+            }
+        }
+
+        function crearConfeti() {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            confetti.style.left = Math.random() * 200 + 'vw';
+            confetti.style.animationDelay = Math.random() * 5 + 's';
+            confetti.style.backgroundColor = `hsl(${Math.random() * 1}, 100%, 80%)`;
+            document.body.appendChild(confetti);
+
+            // Animación simple de caída
+            const animation = confetti.animate([
+                { transform: 'translateY(-50vh)', opacity: 1 },
+                { transform: `translateY(100vh) translateX(${Math.random() * 20 - 10}vw)`, opacity: 0 }
+            ], {
+                duration: Math.random() * 7000 + 2000,
+                easing: 'ease-out'
+            });
+
+            animation.onfinish = () => confetti.remove();
+        }
+    </script>
+</body>
+</html>
